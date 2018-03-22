@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken } from '@/util/auth'
 import { setStore, getStore, removeStore } from '@/util/store'
+import { baseUrl2,baseUrl, khglUrl, dicUrl } from '@/config/env'
 //Storage
 import { validatenull } from '@/util/validate'
 //校验是否为空
@@ -17,6 +18,32 @@ const user = {
     actions: {
         //根据用户名登录
         LoginByUsername({ commit, state, dispatch }, userInfo) {
+//          const user = encryption({
+//              data: userInfo,
+//              type: 'Aes',
+//              key: 'avue',
+//              param: ['useranme', 'password']
+//          });
+            const user = {
+                data: userInfo,
+                type: 'Aes',
+                key: 'avue',
+                param: ['useranme', 'password']
+            };
+            console.log(user)
+            return new Promise((resolve, reject) => {
+                loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
+                    const data = res.data;
+                    console.log(data)
+                    commit('SET_TOKEN', data);
+                    commit('DEL_ALL_TAG');
+                    commit('CLEAR_LOCK');
+                    setToken(data);
+                    resolve();
+                })
+            })
+        },
+        LoginByUsernames({ commit, state, dispatch }, userInfo) {
             const user = encryption({
                 data: userInfo,
                 type: 'Aes',

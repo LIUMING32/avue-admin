@@ -3,9 +3,6 @@ import VueRouter from 'vue-router';
 import { routerMode } from '@/config/env';
 import store from '@/store'
 import { getStore, getSessionStore, vaildUtil } from '@/util/yun'
-
-
-
 import Myiframe from '@/components/iframe/iframe.vue'
 import INDEX from '@/page/index/'
 import errorPage404 from '@/components/errorPage/404.vue';

@@ -1,11 +1,15 @@
-import { baseUrl, khglUrl, dicUrl } from '@/config/env'
+import { baseUrl2,baseUrl, khglUrl, dicUrl } from '@/config/env'
 import request from '@/router/axios'
 import { userInfo, tableData } from '@/mock/user'
 import { menu, menuAll } from '@/mock/menu'
+
 export const loginByUsername = (username, password, code, redomStr) => {
-    return new Promise((resolve, reject) => {
-        resolve({ data: new Date().getTime() });
-    })
+
+   return request({
+	    url: baseUrl2 + '/user/login',
+	    method: 'get',
+	    params: {account:username,password:password}
+	})
 }
 
 export const getUserInfo = () => {

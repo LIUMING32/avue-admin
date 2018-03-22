@@ -12,13 +12,16 @@
 
 
 let baseUrl = '';
+let baseUrl2 = '';
 let iconfontVersion = 'lgiis24af44bcsor';
 let iconfontUrl = `//at.alicdn.com/t/font_567566_${iconfontVersion}.css`;
 let codeUrl = `${baseUrl}/code`
 if (process.env.NODE_ENV == 'development') {
 	baseUrl = `http://localhost`;
+	baseUrl2 = `http://192.168.3.24:8080`;
 } else if (process.env.NODE_ENV == 'production') {
 	baseUrl = `http://localhost`;
+	baseUrl2 = `http://192.168.3.24:8080`;
 }
 
-export { baseUrl, iconfontUrl, codeUrl }
+export { baseUrl2,baseUrl, iconfontUrl, codeUrl }

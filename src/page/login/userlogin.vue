@@ -24,7 +24,8 @@
 
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click.native.prevent="handleLogin" class="login-submit">登录</el-button>
+      <!--<el-button type="primary" @click.native.prevent="handleLogin" class="login-submit">登录</el-button>-->
+      <el-button type="primary" @click.native.prevent="handleLogin2" class="login-submit">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -54,8 +55,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "",
-        password: "",
+        username: "admin",
+        password: "123456",
         code: "",
         redomStr: ""
       },
@@ -103,6 +104,16 @@ export default {
         : (this.passwordType = "");
     },
     handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.$store.dispatch("LoginByUsername", this.loginForm).then(res => {
+            this.$store.commit("ADD_TAG", this.tagWel);
+            this.$router.push({ path: this.tagWel.value });
+          });
+        }
+      });
+    },
+    handleLogin2() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store.dispatch("LoginByUsername", this.loginForm).then(res => {

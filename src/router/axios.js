@@ -23,9 +23,12 @@ axios.interceptors.request.use(config => {
 	loadinginstace = Loading.service({
 		fullscreen: true
 	});
+
 	if (store.getters.token) {
+		
 		config.headers['X-Token'] = getToken() // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
 	}
+	console.log(config)
 	return config
 }, error => {
 	console.log('err' + error)// for debug
@@ -33,10 +36,13 @@ axios.interceptors.request.use(config => {
 })
 //HTTPresponse拦截
 axios.interceptors.response.use(data => {
-	loadinginstace.close();
+	loadinginstace.close();	
+	consoel.log(data);
 	return data
+	
 }, error => {
 	loadinginstace.close();
+	console.log(error)
 
 	return Promise.reject(new Error(msg));
 
