@@ -29,6 +29,7 @@ export default new VueRouter({
 });
 export const asyncRouterMap = [
 	{ path: '/login', name: '登录页', component: _import('login/index') },
+	{ path: '/regist', name: '注册页', component: _import('regist/index') },
 	{ path: '/lock', name: '锁屏页', component: _import('lock/index') },
 	{ path: '*', redirect: '/404', hidden: true },
 	{ path: '/404', component: errorPage404, name: '404' },

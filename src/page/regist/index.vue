@@ -1,31 +1,20 @@
 <template>
-	<div class="login-container pull-height pull-overflow" @keyup.enter.native="handleLogin">  
+	<div class="login-container pull-height pull-overflow" @keyup.enter.native="handleLogin">
     <div class="login-border pull-height">
       <div class="login-main animated fadeIn">
       	<h2 class="text-align">海大星艺后台管理系统</h2>
-        <el-tabs v-model="activeName" >
-          <el-tab-pane label="用户密码" name="user">
-            <userLogin></userLogin>
-          </el-tab-pane>
-          <el-tab-pane label="短信验证码" name="code">
-             <codeLogin></codeLogin>
-          </el-tab-pane>
-          <el-tab-pane label="第三方授权登录" name="third">
-            <thirdLogin></thirdLogin>
-          </el-tab-pane>
-        </el-tabs> 
-        <!--<p class="link-btn"  > <a  @click="goRoutes('/regist')" class="login-submit">创建新账号</a></p>-->     
+      	<useregist></useregist>
+        <p class="link-btn" ><a @click="goRoutes('/login')">已有账号，去登录</a></p>     
       </div>
     </div>
 		
 	</div>
 </template>
 <script>
-import userLogin from "./userlogin";
-import codeLogin from "./codelogin";
-import thirdLogin from "./thirdlogin";
+import useregist from "./useregist";
+
 export default {
-  name: "login",
+  name: "regist",
   data() {
     return {
       activeName: "user"
@@ -36,12 +25,10 @@ export default {
   computed: {},
   props: [],
   methods: {
-  
+  	
   },
   components: {
-    userLogin,
-    codeLogin,
-    thirdLogin
+	useregist
   }
 };
 </script>

@@ -1,11 +1,12 @@
 import { getToken, setToken, removeToken } from '@/util/auth'
 import { setStore, getStore, removeStore } from '@/util/store'
 import { baseUrl2,baseUrl, khglUrl, dicUrl } from '@/config/env'
+
 //Storage
 import { validatenull } from '@/util/validate'
 //校验是否为空
 import { encryption } from '@/util/util'
-import { loginByUsername, getUserInfo, getTableData, getMenu, logout, getMenuAll } from '@/api/user'
+import { loginByUsername, getUserInfo, getTableData, getMenu, logout, getMenuAll,registByUsername } from '@/api/user'
 const user = {
     state: {
         userInfo: {},
@@ -16,6 +17,15 @@ const user = {
         token: getStore({ name: 'token' }) || '',
     },
     actions: {
+//  	注册
+        RegistByUsernames({ commit, state, dispatch }, userInfo) {
+            return new Promise((resolve, reject) => {
+                registByUsername(userInfo.nickName, userInfo.email,userInfo.username,userInfo.password,userInfo.code, userInfo.redomStr).then(res => {                   
+                    resolve(res);
+                })
+            })
+        },
+
         //根据用户名登录
         LoginByUsername({ commit, state, dispatch }, userInfo) {
 //          const user = encryption({
@@ -24,17 +34,11 @@ const user = {
 //              key: 'avue',
 //              param: ['useranme', 'password']
 //          });
-            const user = {
-                data: userInfo,
-                type: 'Aes',
-                key: 'avue',
-                param: ['useranme', 'password']
-            };
-            console.log(user)
             return new Promise((resolve, reject) => {
-                loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
-                    const data = res.data;
-                    console.log(data)
+//          	loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
+                loginByUsername(userInfo.username, userInfo.password, userInfo.code, userInfo.redomStr).then(res => {
+                	console.log(res)
+                    const data = res.data;                    
                     commit('SET_TOKEN', data);
                     commit('DEL_ALL_TAG');
                     commit('CLEAR_LOCK');

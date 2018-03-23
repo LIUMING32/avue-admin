@@ -27,7 +27,9 @@
       <!--<el-button type="primary" @click.native.prevent="handleLogin" class="login-submit">登录</el-button>-->
       <el-button type="primary" @click.native.prevent="handleLogin2" class="login-submit">登录</el-button>
     </el-form-item>
+    <p>{{token}}</p>
   </el-form>
+  
 </template>
 
 <script>
@@ -38,7 +40,8 @@ export default {
   name: "userlogin",
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
+    		const valid_map = ['admin', 'editor','13765022035']
+      if (!isvalidUsername(valid_map,value)) {
         callback(new Error("请输入正确的用户名"));
       } else {
         callback();
@@ -88,7 +91,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters(["tagWel"])
+    ...mapGetters(["tagWel","token"])
   },
   props: [],
   methods: {

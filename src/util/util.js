@@ -5,6 +5,7 @@ import { validatenull } from './validate'
 /**
  * 加密处理
  */
+
 export const encryption = (params) => {
     let { data, type, param, key } = params;
     let result = JSON.parse(JSON.stringify(data));

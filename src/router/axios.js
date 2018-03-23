@@ -14,21 +14,19 @@ if (store.online) axios.defaults.timeout = 13000;
 else axios.defaults.timeout = 0;
 //跨域请求，允许保存cookie
 axios.defaults.withCredentials = true;
-
 let loadinginstace
 let cfg, msg;
 msg = '服务器君开小差了，请稍后再试';
+var CancelToken = axios.CancelToken;
+var source = CancelToken.source();
 //HTTPrequest拦截
 axios.interceptors.request.use(config => {
 	loadinginstace = Loading.service({
 		fullscreen: true
-	});
-
-	if (store.getters.token) {
-		
-		config.headers['X-Token'] = getToken() // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+	});	
+	if (store.getters.token!='') {		
+		config.headers['token'] = getToken() // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
 	}
-	console.log(config)
 	return config
 }, error => {
 	console.log('err' + error)// for debug
@@ -37,9 +35,8 @@ axios.interceptors.request.use(config => {
 //HTTPresponse拦截
 axios.interceptors.response.use(data => {
 	loadinginstace.close();	
-	consoel.log(data);
-	return data
 	
+	return data	
 }, error => {
 	loadinginstace.close();
 	console.log(error)

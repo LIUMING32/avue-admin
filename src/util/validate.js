@@ -2,8 +2,11 @@
  * Created by jiachenpan on 16/11/18.
  */
 //是否有这个字符串
-export function isvalidUsername(str) {
-    const valid_map = ['admin', 'editor']
+/*
+ * valid_map 代表所有字符串数组，验证该字符串是否在数组中
+ */
+export function isvalidUsername(valid_map,str) {  
+
     return valid_map.indexOf(str.trim()) >= 0
 }
 

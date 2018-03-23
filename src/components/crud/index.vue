@@ -1,14 +1,14 @@
 <template>
-  <div class="crud-container pull-auto" style="margin-top: 10px;">
+  <div class="crud-container pull-auto">
     <!-- <div class="crud-header">
         <el-button type="primary" @click="handleAdd" size="small">新 增</el-button>
         <el-button @click="toggleSelection([tableData[1]])" size="small">切换第二选中状态</el-button>
         <el-button @click="toggleSelection()" size="small">取消选择</el-button>
       </div> -->
-    <el-table :data="tableData" :height="tableOption.height" ref="table" style="width:99.5%;margin:0 auto;box-sizing:border-box;" :border="tableOption.border" v-loading="tableLoading" @selection-change="handleSelectionChange">
+    <el-table :data="tableData" :height="tableOption.height" ref="table" style="width:99.5%;margin:0 auto;border-top:1px solid #ebeef5;box-sizing:border-box;" :border="tableOption.border" v-loading="tableLoading" @selection-change="handleSelectionChange">
       <!-- 选择框 -->
       <template v-if="tableOption.selection">
-        <el-table-column type="selection" width="50">
+        <el-table-column type="selection" width="55">
         </el-table-column>
       </template>
       <!-- 序号 -->
@@ -20,7 +20,8 @@
       <template v-for="(column,index) in tableOption.column">
         <el-table-column :width="column.width" :label="column.label" :fixed="column.fixed" :sortable="column.sortable" v-if="!column.hide">
           <template slot-scope="scope">
-            <span v-if="!column.overHidden" v-html="handleDetail(scope.row,column)"></span>
+            <slot :row="scope.row" :dic="DIC[column.dicData]" :name="column.prop" v-if="column.solt"></slot>
+            <span v-else-if="!column.overHidden" v-html="handleDetail(scope.row,column)"></span>
             <el-popover v-else trigger="hover" placement="top">
               <p>{{column.label}}: {{ scope.row[column.prop]}}</p>
               <div slot="reference" class="name-wrapper">
@@ -30,20 +31,19 @@
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="操作"  v-if="tableOption.menu==undefined?true:tableOption.menu" width="360">
+      <el-table-column label="操作" :width="width" v-if="tableOption.menu==undefined?true:tableOption.menu">
         <template slot-scope="scope">
           <template v-if="menu">
             <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope.row,scope.$index)" v-if="tableOption.editBtn==undefined?true:tableOption.meeditBtnnu">编 辑</el-button>
             <el-button type="danger" icon="el-icon-delete" size="small" @click="handleDel(scope.row,scope.$index)" v-if="tableOption.delBtn==undefined?true:tableOption.delBtn">删 除</el-button>
           </template>
-          <slot :row="scope.row"></slot>
+          <slot :row="scope.row" name="menu"></slot>
         </template>
       </el-table-column>
     </el-table>
+    
+    
     <el-pagination v-if="tableOption.page==undefined?true:tableOption.page" class="crud-pagination pull-right" :current-page.sync="page.currentPage" :background="page.background?page.background:true" :page-size="page.pageSize" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper" :total="page.total"></el-pagination>
-    
-    
-    
     <el-dialog :title="boxType==0?'新增':'编辑'" :visible.sync="boxVisible" width="50%" :before-close="boxhandleClose">
       <el-form ref="tableForm" :model="tableForm" label-width="80px" :rules="tableFormRules">
         <el-row :gutter="20" :span="24">
@@ -117,11 +117,13 @@ export default {
     beforeOpen: Function,
     page: {
       type: Object,
-      default: {
-        total: 0, //总页数
-        currentPage: 0, //当前页数
-        pageSize: 10, //每页显示多少条
-        background: true //背景颜色
+      default() {
+        return {
+          total: 0, //总页数
+          currentPage: 0, //当前页数
+          pageSize: 10, //每页显示多少条
+          background: true //背景颜色
+        };
       }
     },
     tableLoading: {
@@ -175,6 +177,9 @@ export default {
     handleCurrentChange(val) {
       this.$emit("handleCurrentChange", val);
     },
+    findByvalue(dic, val) {
+      return findByvalue(dic, val);
+    },
     // 选中实例
     toggleSelection(rows) {
       if (rows) {
@@ -193,13 +198,19 @@ export default {
     //处理数据
     handleDetail(row, column) {
       let result = "";
-      if (column.type) {
-        result = findByvalue(this.DIC[column.dicData], row[column.prop]);
-      } else {
-        result = row[column.prop];
-      }
       if (column.dataDetail) {
-        result = column.dataDetail(result);
+        if (column.type) {
+          result = findByvalue(this.DIC[column.dicData], row[column.prop]);
+        } else {
+          result = row[column.prop];
+        }
+        result = column.dataDetail(row);
+      } else {
+        if (column.type) {
+          result = findByvalue(this.DIC[column.dicData], row[column.prop]);
+        } else {
+          result = row[column.prop];
+        }
       }
       return result;
     },
@@ -284,9 +295,4 @@ export default {
   white-space: nowrap;
   display: block;
 }
-/*.el-table .cell, .el-table th div, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell{padding-left: 0px!important;}
-.el-table td, .el-table th.is-leaf{border-bottom: 0px;}*/
-.el-table--border::after, .el-table--group::after{height: 0px;}
-.el-table::before{height: 0px;}
-
 </style>

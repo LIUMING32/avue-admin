@@ -26,7 +26,9 @@ Object.keys(filters).forEach(key => {
 loadStyle(iconfontUrl);
 
 Vue.config.productionTip = false;
-
+Vue.prototype.goRoutes=function(url){
+	this.$router.push({path:url})	
+}
 
 export function createApp() {
   const app = new Vue({
