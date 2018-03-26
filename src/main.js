@@ -9,7 +9,7 @@ import store from './store';
 import ELEMENT from 'element-ui';
 import { loadStyle } from './util/util'
 import * as urls from '@/config/env';
-import { iconfontUrl } from '@/config/env';
+import { iconfontUrl,iconfontVersion } from '@/config/env';
 import * as filters from './filters' // 全局filter
 import './styles/common.scss';
 Vue.use(ELEMENT)
@@ -22,13 +22,13 @@ Object.keys(urls).forEach(key => {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-//动态插入css方法 loadStyle
-loadStyle(iconfontUrl);
+
+iconfontVersion.forEach(ele => {
+  loadStyle(iconfontUrl.replace('$key', ele));
+})
 
 Vue.config.productionTip = false;
-Vue.prototype.goRoutes=function(url){
-	this.$router.push({path:url})	
-}
+
 
 export function createApp() {
   const app = new Vue({

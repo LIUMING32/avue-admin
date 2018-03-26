@@ -3,8 +3,11 @@ import VueRouter from 'vue-router';
 import { routerMode } from '@/config/env';
 import store from '@/store'
 import { getStore, getSessionStore, vaildUtil } from '@/util/yun'
+
+
+
 import Myiframe from '@/components/iframe/iframe.vue'
-import INDEX from '@/page/index/'
+import Layout from '@/page/index/'
 import errorPage404 from '@/components/errorPage/404.vue';
 import errorPage403 from '@/components/errorPage/403.vue';
 import errorPage500 from '@/components/errorPage/500.vue';
@@ -29,7 +32,6 @@ export default new VueRouter({
 });
 export const asyncRouterMap = [
 	{ path: '/login', name: '登录页', component: _import('login/index') },
-	{ path: '/regist', name: '注册页', component: _import('regist/index') },
 	{ path: '/lock', name: '锁屏页', component: _import('lock/index') },
 	{ path: '*', redirect: '/404', hidden: true },
 	{ path: '/404', component: errorPage404, name: '404' },
@@ -42,7 +44,7 @@ export const asyncRouterMap = [
 	},
 	{
 		path: '/myiframe',
-		component: INDEX,
+		component: Layout,
 		redirect: '/myiframe',
 		children: [
 			{
@@ -55,7 +57,7 @@ export const asyncRouterMap = [
 
 	}, {
 		path: '/wel',
-		component: INDEX,
+		component: Layout,
 		redirect: '/wel/index',
 		children: [
 			{
@@ -65,70 +67,74 @@ export const asyncRouterMap = [
 			}
 		]
 	}, {
+		path: '/info',
+		component: Layout,
+		redirect: '/info/index',
+		children: [
+			{
+				path: 'index',
+				name: '个人信息',
+				component: _import('info/index', 'views')
+			}
+		]
+	}, {
 		path: '/role',
-		component: INDEX,
+		component: Layout,
 		redirect: '/role/index',
 		children: [
 			{
 				path: 'index',
 				name: '权限测试页',
-				component: _import('role')
+				component: _import('role', 'views')
 			}
 		]
 	}, {
 		path: '/table',
-		component: INDEX,
+		component: Layout,
 		redirect: '/table/index',
 		children: [
 			{
 				path: 'index',
 				name: '表格CRUD',
-				component: _import('table/index')
+				component: _import('table/index', 'views')
 			}
 		]
-	}, 
-	{
-		path: '/tableTest',
-		component: INDEX,
-		redirect: '/table/table-test',
-		
-	},
-	{
+	}, {
 		path: '/exhibition',
-		component: INDEX,
+		component: Layout,
 		redirect: '/exhibition/index',
 		children: [
 			{
 				path: 'index',
 				name: '数据展示',
-				component: _import('exhibition/index')
+				component: _import('exhibition/index', 'views')
 			}
 		]
 	}, {
 		path: '/form',
-		component: INDEX,
+		component: Layout,
 		redirect: '/form/index',
 		children: [
 			{
 				path: 'index',
 				name: '表单CRUD',
-				component: _import('form/index')
+				component: _import('form/index', 'views')
 			}
 		]
 	}, {
 		path: '/iconfont',
-		component: INDEX,
+		component: Layout,
 		redirect: '/iconfont/index',
 		children: [
 			{
 				path: 'index',
 				name: '阿里图标',
-				component: _import('iconfont/index')
+				component: _import('iconfont/index', 'views')
 			}
 		]
 	}, {
 		path: '/errlog',
-		component: INDEX,
+		component: Layout,
 		redirect: '/errlog/index',
 		children: [
 			{
@@ -143,28 +149,20 @@ export const asyncRouterMap = [
 		]
 	}, {
 		path: '/admin',
-		component: INDEX,
+		component: Layout,
 		children: [
 			{
 				path: 'user',
 				name: '用户管理',
-				component: _import('admin/user/index'),
-				
-			}, 
-			{
-				path: 'table',
-				name: '测试',
-				component: _import('admin/user/table'),
-				
-			},
-			{
+				component: _import('admin/user/index', 'views')
+			}, {
 				path: 'role',
 				name: '角色管理',
-				component: _import('admin/role/index')
+				component: _import('admin/role/index', 'views')
 			}, {
 				path: 'menu',
 				name: '菜单管理',
-				component: _import('admin/menu/index')
+				component: _import('admin/menu/index', 'views')
 			}
 		]
 	}

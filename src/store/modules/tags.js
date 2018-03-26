@@ -3,6 +3,7 @@ import { validatenull } from "@/util/validate"
 const tagObj = {
     label: '',
     value: '',
+    query: '',
     num: '',
     close: true,
 }
@@ -25,10 +26,7 @@ const navs = {
             label: "首页",
             value: "/wel/index"
         },
-        tagCurrent: [{
-            label: "首页",
-            value: "/wel/index"
-        }],
+        tagCurrent: getStore({ name: 'tagCurrent' }) || [],
     },
     actions: {
 
@@ -36,11 +34,12 @@ const navs = {
     mutations: {
         ADD_TAG: (state, action) => {
             state.tag = action;
-            setStore({ name: 'tag', content: state.tag, type: 'session' })
+            setStore({ name: 'tag', content: state.tag })
             if (state.tagList.some(a => a.value === action.value)) return
             state.tagList.push({
                 label: action.label,
                 value: action.value,
+                query: action.query,
             })
             state.tagList = setFistTag(state.tagList);
             setStore({ name: 'tagList', content: state.tagList })
@@ -50,13 +49,12 @@ const navs = {
             setStore({ name: 'tagCurrent', content: state.tagCurrent })
         },
         SET_TAG: (state, value) => {
-            for (const [i, v] of state.tagList.entries()) {
-                if (v.value === value) {
-                    state.tag = state.tagList[i];
+            state.tagList.forEach((ele, num) => {
+                if (ele.value === value) {
+                    state.tag = state.tagList[num];
                     setStore({ name: 'tag', content: state.tag })
-                    break
                 }
-            }
+            });
         },
         DEL_ALL_TAG: (state, action) => {
             state.tag = tagObj;
@@ -65,28 +63,26 @@ const navs = {
             removeStore({ name: 'tagList' });
         },
         DEL_TAG_OTHER: (state, action) => {
-            for (const [i, v] of state.tagList.entries()) {
-                if (v.value === state.tag.value) {
-                    state.tagList = state.tagList.slice(i, i + 1)
+            state.tagList.forEach((ele, num) => {
+                if (ele.value === state.tag.value) {
+                    state.tagList = state.tagList.slice(num, num + 1)
                     state.tag = state.tagList[0];
                     state.tagList[0].close = false;
                     setStore({ name: 'tag', content: state.tag })
                     setStore({ name: 'tagList', content: state.tagList })
-                    break
                 }
-            }
+            })
 
         },
         DEL_TAG: (state, action) => {
-            for (const [i, a] of state.tagList.entries()) {
-                if (a.value === action.value) {
-                    state.tagList.splice(i, 1)
+            state.tagList.forEach((ele, num) => {
+                if (ele.value === action.value) {
+                    state.tagList.splice(num, 1)
                     state.tagList = setFistTag(state.tagList);
                     setStore({ name: 'tag', content: state.tagList, type: 'session' })
                     setStore({ name: 'tagList', content: state.tagList, type: 'session' })
-                    break
                 }
-            }
+            })
         },
     }
 }

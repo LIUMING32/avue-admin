@@ -7,6 +7,7 @@ export default {
         {
             label: "用户名",
             prop: "username",
+            width: "150",
             solt: true,
             dataDetail: row => {
                 return row.username + '自定义函数';
@@ -32,6 +33,7 @@ export default {
         {
             label: "地址",
             prop: "address",
+            width: "300",
             span: 24,
             overHidden: true
         }

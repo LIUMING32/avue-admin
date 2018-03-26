@@ -8,7 +8,7 @@
     <!-- tag盒子 -->
     <div class="tags-box" ref="tagBox">
       <div class="tags-list" ref="tagsList" @mousewheel="hadelMousewheel" @mouseup="hadelMouseUp" @mousemove="hadelMouse" @mousedown="hadelMousestart" @touchup="hadelMouseUp" @touchmove="hadelMouse" @touchstart="hadelMousestart">
-        <div ref="tagsPageOpened" class="tag-item" :name="item.value" @contextmenu.prevent="openMenu(item,$event)" v-for="(item,index) in tagList" :key="index" @click="openUrl(item.value,item.label,item.num)">
+        <div ref="tagsPageOpened" class="tag-item" :name="item.value" @contextmenu.prevent="openMenu(item,$event)" v-for="(item,index) in tagList" :key="index" @click="openUrl(item)">
           <span class="icon-yuan tag-item-icon" :class="{'is-active':nowTagValue==item.value}"></span>
           <span class="tag-text">{{item.label}}</span>
           <i class="el-icon-close tag-close" @click.stop="closeTag(item)" v-if="item.close"></i>
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { resolveUrlPath } from "@/util/util";
+import { resolveUrlPath, setUrlPath } from "@/util/util";
 import { mapState, mapGetters } from "vuex";
 import Breadcrumb from "./breadcrumb";
 export default {
@@ -77,11 +77,7 @@ export default {
   computed: {
     ...mapGetters(["tagWel", "tagList", "isCollapse", "tag"]),
     nowTagValue: function() {
-      const value = this.$route.query.src
-        ? this.$route.query.src
-        : this.$route.path;
-      this.$store.commit("SET_TAG", value);
-      return value;
+      return setUrlPath(this.$route);
     },
     tagListNum: function() {
       return this.tagList.length != 0;
@@ -174,8 +170,6 @@ export default {
     },
     closeAllTags() {
       this.$store.commit("DEL_ALL_TAG");
-      this.$store.commit("ADD_TAG", this.tagWel);
-      this.$router.push({ path: resolveUrlPath(this.tagWel.value) });
     },
     moveToView(tag) {
       if (tag.offsetLeft < -this.tagBodyLeft) {
@@ -196,12 +190,11 @@ export default {
         );
       }
     },
-    openUrl(url, name, num) {
-      this.$store.commit("ADD_TAG", {
-        label: name,
-        value: url
+    openUrl(item) {
+      this.$router.push({
+        path: resolveUrlPath(item.value, item.label),
+        query: item.query
       });
-      this.$router.push({ path: resolveUrlPath(url) });
     },
     eachTag(tag) {
       for (var key in this.tagList) {
@@ -217,18 +210,14 @@ export default {
       this.$store.commit("DEL_TAG", item);
       if (item.value == this.tag.value) {
         tag = this.tagList[key == 0 ? key : key - 1];
-        this.openUrl(tag.value, tag.label, tag.num);
+        this.openUrl(tag);
       }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-	.tags-breadcrumb{background: #fafafa;}
-/*	.tags-container .tags-box{border: 1px solid #eee;}*/
-	.tags-container .tags-menu{box-shadow: none;background: none;}
-	/*.tags-container .tags-list{padding: 0px 10px;}
-	.tags-container .tag-item{border-radius:0px;margin:0px 3px;height: 38px; line-height: 38px;box-sizing: border-box;}*/
+
 </style>
 
 

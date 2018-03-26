@@ -1,11 +1,10 @@
 import { validatenull } from './validate'
-
+import { baseUrl } from '@/config/env'
 
 
 /**
  * 加密处理
  */
-
 export const encryption = (params) => {
     let { data, type, param, key } = params;
     let result = JSON.parse(JSON.stringify(data));
@@ -26,7 +25,7 @@ export const encryption = (params) => {
  * 设置浏览器头部标题
  */
 export const setTitle = function (title) {
-    title = title ? `${title}——后台管理系统` : '后台管理系统';
+    title = title ? `${title}——Avue 通用管理 系统快速开发框架` : 'Avue 通用管理 系统快速开发框架';
     window.document.title = title;
 };
 /**
@@ -39,7 +38,26 @@ export const fullscreenToggel = () => {
         reqFullScreen();
     }
 }
-
+/**
+ * esc监听全屏
+ */
+export const listenfullscreen = (callback) => {
+    function listen() {
+        callback()
+    }
+    document.addEventListener("fullscreenchange", function (e) {
+        listen();
+    });
+    document.addEventListener("mozfullscreenchange", function (e) {
+        listen();
+    });
+    document.addEventListener("webkitfullscreenchange", function (e) {
+        listen();
+    });
+    document.addEventListener("msfullscreenchange", function (e) {
+        listen();
+    });
+}
 /**
  * 浏览器判断是否全屏
  */
@@ -98,14 +116,34 @@ export const findParent = (menu, id) => {
 /**
  * 总体路由处理器
  */
-export const resolveUrlPath = (url) => {
+export const resolveUrlPath = (url, name) => {
+
     let reqUrl = url;
-    if (url.indexOf("http") != -1) {
-        reqUrl = `/myiframe/urlPath?src=${reqUrl}`;
+    if (url.indexOf("http") != -1 || url.indexOf("https") != -1) {
+        reqUrl = `/myiframe/urlPath?src=${reqUrl}&name=${name}`;
     } else {
         reqUrl = `${reqUrl}`;
     }
     return reqUrl;
+}
+/**
+ * 总体路由设置器
+ */
+export const setUrlPath = ($route) => {
+    let value = "";
+    if ($route.query.src) {
+        value = $route.query.src;
+        if (value.indexOf(baseUrl) != -1) {
+            const port = value
+                .substr(value.lastIndexOf(":"))
+                .replace(value.substr(value.lastIndexOf("/")), "");
+            const path = value.replace(baseUrl + port, "");
+            value = "#" + path + port;
+        }
+    } else {
+        value = $route.path;
+    }
+    return value;
 }
 /**
  * 动态插入css

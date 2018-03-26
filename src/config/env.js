@@ -1,3 +1,5 @@
+
+
 /**
  * 配置编译环境和线上环境之间的切换
  * 
@@ -13,8 +15,8 @@
 
 let baseUrl = '';
 let baseUrl2 = '';
-let iconfontVersion = 'lgiis24af44bcsor';
-let iconfontUrl = `//at.alicdn.com/t/font_567566_${iconfontVersion}.css`;
+let iconfontVersion = ['567566_lgiis24af44bcsor'];
+let iconfontUrl = `//at.alicdn.com/t/font_$key.css`;
 let codeUrl = `${baseUrl}/code`
 if (process.env.NODE_ENV == 'development') {
 	baseUrl = `http://localhost`;
@@ -24,4 +26,4 @@ if (process.env.NODE_ENV == 'development') {
 	baseUrl2 = `http://192.168.3.24:8080`;
 }
 
-export { baseUrl2,baseUrl, iconfontUrl, codeUrl }
+export { baseUrl2,baseUrl, iconfontUrl, codeUrl,iconfontVersion }
